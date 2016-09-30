@@ -4,7 +4,7 @@ defmodule MarketApi.Market do
   schema "markets" do
     field :name, :string
     field :phone, :string
-
+    has_many :products, MarketApi.Product
     timestamps()
   end
 
