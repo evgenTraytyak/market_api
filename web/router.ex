@@ -17,6 +17,12 @@ defmodule MarketApi.Router do
     pipe_through :browser # Use the default browser stack
 
     get "/", PageController, :index
+
+    resources "/markets", MarketController, except: [:new, :edit] do
+      resources "/products", ProductController, only: [:index]
+    end
+
+    resources "/products", ProductController, except: [:new, :edit]
   end
 
   # Other scopes may use custom stacks.
