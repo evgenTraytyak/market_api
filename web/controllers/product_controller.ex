@@ -5,7 +5,7 @@ defmodule MarketApi.ProductController do
 
   def index(conn, _params) do
     products = Repo.all(Product)
-    render(conn, "index.json", products: products)
+    render(conn, "index.json-api", data: products)
   end
 
   def create(conn, %{"product" => product_params}) do
@@ -16,17 +16,17 @@ defmodule MarketApi.ProductController do
         conn
         |> put_status(:created)
         |> put_resp_header("location", product_path(conn, :show, product))
-        |> render("show.json", product: product)
+        |> render("show.json-api", data: product)
       {:error, changeset} ->
         conn
         |> put_status(:unprocessable_entity)
-        |> render(MarketApi.ChangesetView, "error.json", changeset: changeset)
+        |> render(MarketApi.ChangesetView, "error.json-api", changeset: changeset)
     end
   end
 
   def show(conn, %{"id" => id}) do
     product = Repo.get!(Product, id)
-    render(conn, "show.json", product: product)
+    render(conn, "show.json-api", data: product)
   end
 
   def update(conn, %{"id" => id, "product" => product_params}) do
@@ -35,11 +35,11 @@ defmodule MarketApi.ProductController do
 
     case Repo.update(changeset) do
       {:ok, product} ->
-        render(conn, "show.json", product: product)
+        render(conn, "show.json-api", data: product)
       {:error, changeset} ->
         conn
         |> put_status(:unprocessable_entity)
-        |> render(MarketApi.ChangesetView, "error.json", changeset: changeset)
+        |> render(MarketApi.ChangesetView, "error.json-api", changeset: changeset)
     end
   end
 

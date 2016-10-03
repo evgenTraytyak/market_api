@@ -5,7 +5,7 @@ defmodule MarketApi.MarketController do
 
   def index(conn, _params) do
     markets = Repo.all(Market)
-    render(conn, "index.json", markets: markets)
+    render(conn, "index.json-api", data: markets)
   end
 
   def create(conn, %{"market" => market_params}) do
@@ -16,17 +16,17 @@ defmodule MarketApi.MarketController do
         conn
         |> put_status(:created)
         |> put_resp_header("location", market_path(conn, :show, market))
-        |> render("show.json", market: market)
+        |> render("show.json-api", data: market)
       {:error, changeset} ->
         conn
         |> put_status(:unprocessable_entity)
-        |> render(MarketApi.ChangesetView, "error.json", changeset: changeset)
+        |> render(MarketApi.ChangesetView, "error.json-api", changeset: changeset)
     end
   end
 
   def show(conn, %{"id" => id}) do
     market = Repo.get!(Market, id)
-    render(conn, "show.json", market: market)
+    render(conn, "show.json-api", data: market)
   end
 
   def update(conn, %{"id" => id, "market" => market_params}) do
@@ -35,11 +35,11 @@ defmodule MarketApi.MarketController do
 
     case Repo.update(changeset) do
       {:ok, market} ->
-        render(conn, "show.json", market: market)
+        render(conn, "show.json-api", data: market)
       {:error, changeset} ->
         conn
         |> put_status(:unprocessable_entity)
-        |> render(MarketApi.ChangesetView, "error.json", changeset: changeset)
+        |> render(MarketApi.ChangesetView, "error.json-api", changeset: changeset)
     end
   end
 
